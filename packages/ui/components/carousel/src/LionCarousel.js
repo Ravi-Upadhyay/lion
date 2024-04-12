@@ -1,8 +1,17 @@
 import { html, LitElement, css } from 'lit';
+import { LionButton } from '@lion/ui/button.js';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 
-export class LionCarousel extends LitElement {
+export class LionCarousel extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'lion-button': LionButton,
+    };
+  }
+
   static get properties() {
     return {
+      slides: { type: Array },
       autoRotation: { type: Boolean, reflect: true },
       timeInterval: { type: Number },
       __slides: { type: Array },
@@ -54,9 +63,7 @@ export class LionCarousel extends LitElement {
 
   firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
-    this.__addEventListenerNext();
-    this.__addEventListenerPrevious();
-    this.__addEventListenerRotation();
+    this.__handleSlideChange();
   }
 
   __initializeSlides() {
@@ -76,28 +83,6 @@ export class LionCarousel extends LitElement {
     ];
     this.__totalSlides = this.__slides.length;
     this.__currentSlideIndex = 0;
-  }
-
-  __addEventListenerNext() {
-    const nextButtonNode = this.shadowRoot?.querySelector('.carousel .controls button.next');
-    if (nextButtonNode)
-      nextButtonNode.addEventListener('click', () => this.__handleNextButtonClick());
-  }
-
-  __addEventListenerPrevious() {
-    const previousButtonNode = this.shadowRoot?.querySelector(
-      '.carousel .controls button.previous',
-    );
-    if (previousButtonNode)
-      previousButtonNode.addEventListener('click', () => this.__handlePreviousButtonClick());
-  }
-
-  __addEventListenerRotation() {
-    const rotationButtonNode = this.shadowRoot?.querySelector(
-      '.carousel .controls button.rotation',
-    );
-    if (rotationButtonNode)
-      rotationButtonNode.addEventListener('click', () => this.__handleRotationButtonClick());
   }
 
   __nextCurrentSlideIndex() {
@@ -164,7 +149,7 @@ export class LionCarousel extends LitElement {
       <div class="carousel" aria-roledescription="carousel" aria-label="Cats are Social">
         <div class="carousel-inner">
           <div class="carousel-items" aria-live="off">
-            <div class="carousel-item active">
+            <div class="carousel-item">
               <img src="${this.__slides[0].url}" alt="${this.__slides[0].alt}" />
             </div>
             <div class="carousel-item">
@@ -175,11 +160,25 @@ export class LionCarousel extends LitElement {
             </div>
           </div>
           <div class="controls">
-            <button type="button" class="rotation pause" aria-label="Rotation Pause">
+            <lion-button
+              class="previous"
+              aria-label="Previous Slide"
+              @click="${this.__handlePreviousButtonClick}"
+              >Previous</lion-button
+            >
+            <lion-button
+              class="rotation pause"
+              aria-label="Toggle Slide Rotation"
+              @click="${this.__handleRotationButtonClick}"
+            >
               ${this.autoRotation ? 'Pause' : 'Play'}
-            </button>
-            <button type="button" class="previous" aria-label="Previous Slide">Previous</button>
-            <button type="button" class="next" aria-label="Next Slide">Next</button>
+            </lion-button>
+            <lion-button
+              class="next"
+              aria-label="Next Slide"
+              @click="${this.__handleNextButtonClick}"
+              >Next</lion-button
+            >
           </div>
         </div>
       </div>
