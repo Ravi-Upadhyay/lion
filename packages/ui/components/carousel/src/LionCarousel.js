@@ -141,23 +141,19 @@ export class LionCarousel extends ScopedElementsMixin(LitElement) {
     this.autoRotation = !this.autoRotation;
   }
 
-  // TODO: Composite Rendering - After Initial Tests (Carousel Items)
-
   render() {
     // TODO: DevelopmentPurposeOnly - Images have been put under "/_site-dev/_merged_assets/carousel".
     return html`
       <div class="carousel" aria-roledescription="carousel" aria-label="Cats are Social">
         <div class="carousel-inner">
           <div class="carousel-items" aria-live="off">
-            <div class="carousel-item">
-              <img src="${this.__slides[0].url}" alt="${this.__slides[0].alt}" />
-            </div>
-            <div class="carousel-item">
-              <img src="${this.__slides[1].url}" alt="${this.__slides[1].alt}" />
-            </div>
-            <div class="carousel-item">
-              <img src="${this.__slides[2].url}" alt="${this.__slides[2].alt}" />
-            </div>
+            ${this.__slides.map(
+              slide => html`
+                <div class="carousel-item">
+                  <img src="${slide.url}" alt="${slide.alt}" />
+                </div>
+              `,
+            )}
           </div>
           <div class="controls">
             <lion-button
