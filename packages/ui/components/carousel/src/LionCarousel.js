@@ -14,9 +14,6 @@ export class LionCarousel extends ScopedElementsMixin(LitElement) {
       slides: { type: Array },
       autoRotation: { type: Boolean, reflect: true },
       timeInterval: { type: Number },
-      __slides: { type: Array },
-      __currentSlideIndex: { type: Number },
-      __totalSlides: { type: Number },
     };
   }
 
@@ -56,6 +53,13 @@ export class LionCarousel extends ScopedElementsMixin(LitElement) {
 
   constructor() {
     super();
+    /* Initialization of private properties
+    @private_property __slides [Array]: Reconstructed array of slides, Private array is to add properties
+                        configuration which might be missing in public api, such as aria-label.
+    @private_property __currentSlideIndex [Number]: Tracks down index of current slide needs to be visible.
+                        default : 0, first slide.
+    @private_property __totalSlides [Number]: Tracks the number of slides present.
+    */
     this.autoRotation = false;
     this.timeInterval = 5000;
     this.__initializeSlides();
