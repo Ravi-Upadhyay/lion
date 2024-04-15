@@ -9,6 +9,12 @@ export class LionCarousel extends ScopedElementsMixin(LitElement) {
     };
   }
 
+  /**
+   * @property slides public property expecting array.
+   * @property autoRotation public property to initialize default autoRotation. Default false
+   * @property timeInterval public property to set up time interval. Default 5000ms
+   * @returns {{autoRotation: {reflect: boolean, type: BooleanConstructor}, slides: {type: ArrayConstructor}, timeInterval: {type: NumberConstructor}}}
+   */
   static get properties() {
     return {
       slides: { type: Array },
@@ -70,6 +76,14 @@ export class LionCarousel extends ScopedElementsMixin(LitElement) {
     this.__handleSlideChange();
   }
 
+  /**
+   *
+   * @private
+   * (Temporarily for Demo), setting up static map of slides
+   * Should take @property [slides] and check if information is missing
+   * For example: dynamic aria-label, if missing.
+   * Also, sets up __currentSlideIndex, __totalSlides
+   */
   __initializeSlides() {
     this.__slides = [
       {
